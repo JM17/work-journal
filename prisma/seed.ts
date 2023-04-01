@@ -1,10 +1,21 @@
 import { PrismaClient } from "@prisma/client";
+
 const db = new PrismaClient();
 
 async function seed() {
+  const john = await db.user.create({
+    data: {
+      username: "johndoe",
+      // this is a hashed version of "twixrox"
+      passwordHash:
+        "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u",
+    },
+  });
+
   await Promise.all(
     getEntries().map((entry) => {
-      return db.entry.create({ data: entry });
+      const data = { userId: john.id, ...entry };
+      return db.entry.create({ data });
     })
   );
 }
@@ -15,17 +26,17 @@ function getEntries() {
   return [
     {
       type: "learning",
-      text: `I never wanted to believe that my Dad was stealing from his job as a road worker. But when I got home, all the signs were there.`,
+      text: `Lorem ipsum`,
       date: new Date("2021-01-01"),
     },
     {
       type: "work",
-      text: `I was wondering why the frisbee was getting bigger, then it hit me.`,
+      text: `Lorem ipsum`,
       date: new Date("2021-01-01"),
     },
     {
       type: "interesting-thing",
-      text: `Why do trees seem suspicious on sunny days? Dunno, they're just a bit shady.`,
+      text: `Lorem ipsum`,
       date: new Date("2021-01-01"),
     },
   ];
