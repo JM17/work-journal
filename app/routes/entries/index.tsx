@@ -3,9 +3,9 @@ import type { LoaderArgs } from "@remix-run/node";
 import { type ActionArgs, json, redirect } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
-import { db } from "~/utils/db.server";
 import { getUser, requireUserId } from "~/utils/session.server";
 import { format, parseISO, startOfWeek } from "date-fns";
+import { getEntries } from "~/model/entry.server";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -32,13 +32,30 @@ export async function action({ request }: ActionArgs) {
   });
 }
 
-function EntryList({
-  entries,
-  title,
-}: {
+type LoaderData = {
+  entries: Awaited<ReturnType<typeof getEntries>>;
+  user: Awaited<ReturnType<typeof getUser>>;
+  orderBy: { date: "asc" | "desc" };
+};
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const user = await getUser(request);
+  if (!user?.username || typeof user.id !== "string") {
+    throw redirect(`/login`);
+  }
+  const entries = await getEntries(user.id);
+  return json<LoaderData>({
+    entries: entries,
+    user: user,
+    orderBy: { date: "desc" },
+  });
+};
+
+type EntryListProps = {
   entries: { id: string; text: string }[];
   title: string;
-}) {
+};
+function EntryList({ entries, title }: EntryListProps) {
   return (
     <div>
       <p>{title}</p>
@@ -56,18 +73,6 @@ function EntryList({
     </div>
   );
 }
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getUser(request);
-  if (!user?.username || typeof user.id !== "string") {
-    throw redirect(`/login`);
-  }
-  return json({
-    entries: await db.entry.findMany({ where: { userId: user.id } }),
-    user: user,
-    orderBy: { date: "desc" },
-  });
-};
 
 export default function EntriesIndexRoute() {
   const { entries } = useLoaderData<typeof loader>();
