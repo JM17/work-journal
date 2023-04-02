@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { getUser, requireUserId } from "~/utils/session.server";
 import { format, parseISO, startOfWeek } from "date-fns";
 import { getEntries } from "~/model/entry.server";
+import NavButton from "~/components/buttons/nav-button";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -117,12 +118,9 @@ export default function EntriesIndexRoute() {
 
   return (
     <div>
-      <nav className="mt-6">
-        <Link to="new" className={"text-blue-500 hover:text-blue-400"}>
-          Add new entry
-        </Link>
-      </nav>
-
+      <div className="mt-6">
+        <NavButton to={"new"} label={"Add new entry"} />
+      </div>
       <div className="space-y-16">
         {weeks.map((week) => (
           <div key={week.startingDate} className={"mt-6"}>

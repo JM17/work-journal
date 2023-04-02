@@ -1,16 +1,16 @@
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { useActionData, useNavigation } from "@remix-run/react";
-
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { format } from "date-fns";
 import { useEffect, useRef } from "react";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
-import BackButton from "~/components/back-button";
+import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { validateText } from "~/utils/validators";
 import { createEntry } from "~/model/entry.server";
+import SubmitButton from "~/components/buttons/submit-button";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -37,7 +37,8 @@ export async function action({ request }: ActionArgs) {
   };
   const fields = { text };
 
-  if (Object.values(fieldErrors).some(Boolean)) {
+  const hasErrors = Object.values(fieldErrors).some(Boolean);
+  if (hasErrors) {
     return badRequest({
       fieldErrors,
       fields,
@@ -45,35 +46,36 @@ export async function action({ request }: ActionArgs) {
     });
   }
 
-  const entry = await createEntry({
-    data: {
-      date: new Date(date),
-      type: type,
-      text: text,
-      userId: userId,
-    },
+  await createEntry({
+    date: new Date(date),
+    type: type,
+    text: text,
+    userId: userId,
   });
-  return redirect(`/${entry.id}`);
+  return redirect("/entries");
 }
 
 export default function NewEntryRoute() {
-  const { state } = useNavigation();
+  const navigation = useNavigation();
+  const state = navigation.state;
   const actionData = useActionData<typeof action>();
-  let textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const isSubmitting = state === "submitting";
 
   useEffect(() => {
-    if (state === "submitting" && textareaRef.current) {
+    if (isSubmitting && textareaRef.current) {
       textareaRef.current.value = "";
       textareaRef.current.focus();
     }
-  }, [state]);
+  }, [isSubmitting]);
 
   return (
     <FormContainer>
-      <BackButton to={`/entries`} label={"Journal"} />
+      <NavButton to={`/entries`} label={"Journal"} leftIcon={<BackIcon />} />
       <div>
         <FormTitle title={"Create a new entry"} />
-        <form method="post">
+        <Form method="post">
           <fieldset
             className="disabled:opacity-80"
             disabled={state === "submitting"}
@@ -134,21 +136,16 @@ export default function NewEntryRoute() {
                 className="w-full rounded text-gray-700"
               />
               {actionData?.fieldErrors?.text ? (
-                <p id="text-error" role={"alert"}>
+                <p id="text-error" role={"alert"} className={"text-red-600"}>
                   {actionData?.fieldErrors.text}
                 </p>
               ) : null}
             </div>
             <div className={"mt-2 text-right"}>
-              <button
-                type="submit"
-                className="rounded bg-blue-500 px-6 py-1 font-semibold text-white hover:bg-blue-400"
-              >
-                {state === "submitting" ? "Saving..." : "Save"}
-              </button>
+              <SubmitButton isSubmitting={isSubmitting} />
             </div>
           </fieldset>
-        </form>
+        </Form>
       </div>
     </FormContainer>
   );

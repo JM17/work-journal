@@ -1,7 +1,12 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useActionData, useLoaderData, useNavigation } from "@remix-run/react";
-import BackButton from "~/components/back-button";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
+import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { format } from "date-fns";
@@ -9,6 +14,7 @@ import { badRequest } from "~/utils/request.server";
 import { useEffect, useRef } from "react";
 import { validateText } from "~/utils/validators";
 import { getEntry, updateEntry } from "~/model/entry.server";
+import SubmitButton from "~/components/buttons/submit-button";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -63,19 +69,21 @@ export default function EntryRoute() {
   const actionData = useActionData<typeof action>();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const isSubmitting = state === "submitting";
+
   useEffect(() => {
-    if (state === "submitting" && textareaRef.current) {
+    if (isSubmitting && textareaRef.current) {
       textareaRef.current.value = "";
       textareaRef.current.focus();
     }
-  }, [state]);
+  }, [isSubmitting]);
 
   return (
     <FormContainer>
-      <BackButton to={`/entries`} label={"Journal"} />
+      <NavButton to={`/entries`} label={"Journal"} leftIcon={<BackIcon />} />
       <div>
         <FormTitle title={"Edit entry"} />
-        <form method="post">
+        <Form method="post">
           <fieldset
             className="disabled:opacity-80"
             disabled={state === "submitting"}
@@ -145,15 +153,10 @@ export default function EntryRoute() {
               ) : null}
             </div>
             <div className={"mt-2 text-right"}>
-              <button
-                type="submit"
-                className="rounded bg-blue-500 px-6 py-1 font-semibold text-white hover:bg-blue-400"
-              >
-                {state === "submitting" ? "Saving..." : "Save"}
-              </button>
+              <SubmitButton isSubmitting={isSubmitting} />
             </div>
           </fieldset>
-        </form>
+        </Form>
       </div>
     </FormContainer>
   );
