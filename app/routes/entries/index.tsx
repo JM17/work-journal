@@ -46,7 +46,9 @@ function EntryList({
         <div key={entry.id}>
           <ul className="ml-8 list-disc">
             <li>
-              <Link to={entry.id}>{entry.text}</Link>
+              <Link to={entry.id} className={"hover:text-gray-300"}>
+                {entry.text}
+              </Link>
             </li>
           </ul>
         </div>
@@ -111,10 +113,7 @@ export default function EntriesIndexRoute() {
   return (
     <div>
       <nav className="mt-6">
-        <Link
-          to="new"
-          className={"flex items-center text-blue-500 hover:text-blue-400"}
-        >
+        <Link to="new" className={"text-blue-500 hover:text-blue-400"}>
           Add new entry
         </Link>
       </nav>

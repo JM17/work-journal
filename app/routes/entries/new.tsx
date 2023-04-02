@@ -10,12 +10,7 @@ import { requireUserId } from "~/utils/session.server";
 import BackButton from "~/components/back-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
-
-function validateText(content: string) {
-  if (content.length < 3) {
-    return "Text is too short";
-  }
-}
+import { validateText } from "~/utils/validators";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
