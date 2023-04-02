@@ -54,7 +54,7 @@ export async function action({ request }: ActionArgs) {
     case "login": {
       // login to get the user
       // if there's no user, return the fields and a formError
-      // if there is a user, create their session and redirect to /jokes
+      // if there is a user, create their session and redirect to /
       const user = await login({ username, password });
       if (!user) {
         return badRequest({
@@ -63,7 +63,7 @@ export async function action({ request }: ActionArgs) {
           formError: `Invalid username or password`,
         });
       }
-      return createUserSession({ userId: user.id, redirectTo: "/" });
+      return createUserSession({ userId: user.id, redirectTo: "/entries" });
     }
     case "register": {
       const userExists = await db.user.findFirst({
