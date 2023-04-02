@@ -1,19 +1,16 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { db } from "~/utils/db.server";
 import { useActionData, useLoaderData, useNavigation } from "@remix-run/react";
 import BackButton from "~/components/back-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { format } from "date-fns";
-import { PrismaClient } from "@prisma/client";
 import { badRequest } from "~/utils/request.server";
 import { useEffect, useRef } from "react";
 import { validateText } from "~/utils/validators";
+import { getEntry, updateEntry } from "~/model/entry.server";
 
 export async function action({ request }: ActionArgs) {
-  const db = new PrismaClient();
-
   const formData = await request.formData();
   const values = Object.fromEntries(formData);
   const { date, type, text, id } = values;
@@ -44,30 +41,27 @@ export async function action({ request }: ActionArgs) {
     });
   }
 
-  await db.entry.update({
-    where: { id: id as string },
-    data: {
-      date: new Date(date),
-      type: type,
-      text: text,
-    },
+  await updateEntry(id as string, {
+    date: new Date(date),
+    type: type,
+    text: text,
   });
   return redirect("/entries");
 }
 
+type LoaderData = Awaited<ReturnType<typeof getEntry>>;
+
 export const loader = async ({ params }: LoaderArgs) => {
   const id = params.id as string;
-  const entry = await db.entry.findUnique({
-    where: { id: id },
-  });
-  return json(entry);
+  const entry = await getEntry(id);
+  return json<LoaderData>(entry);
 };
 
 export default function EntryRoute() {
   const { state } = useNavigation();
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  let textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (state === "submitting" && textareaRef.current) {

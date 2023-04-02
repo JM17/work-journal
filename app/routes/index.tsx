@@ -1,6 +1,7 @@
 import { json, LoaderArgs, redirect } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { getUser } from "~/utils/session.server";
+import BackButton from "~/components/back-button";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getUser(request);
@@ -51,7 +52,7 @@ export default function Index() {
         Learnings and doings. Updated weekly.
       </p>
       <main>
-        <Outlet />
+        <BackButton to={"entries"} label={"Journal"} />
       </main>
     </div>
   );

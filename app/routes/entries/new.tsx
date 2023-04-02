@@ -4,17 +4,16 @@ import { useActionData, useNavigation } from "@remix-run/react";
 
 import { format } from "date-fns";
 import { useEffect, useRef } from "react";
-import { PrismaClient } from "@prisma/client";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
 import BackButton from "~/components/back-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { validateText } from "~/utils/validators";
+import { createEntry } from "~/model/entry.server";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
-  const db = new PrismaClient();
 
   const formData = await request.formData();
   const values = Object.fromEntries(formData);
@@ -46,7 +45,7 @@ export async function action({ request }: ActionArgs) {
     });
   }
 
-  const entry = await db.entry.create({
+  const entry = await createEntry({
     data: {
       date: new Date(date),
       type: type,
