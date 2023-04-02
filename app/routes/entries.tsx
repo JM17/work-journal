@@ -12,7 +12,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   });
 };
 
-export default function Index() {
+export default function EntriesRoute() {
   const { user } = useLoaderData<typeof loader>();
 
   return (
@@ -47,7 +47,7 @@ export default function Index() {
         </div>
       )}
       <h1 className="text-5xl">Work Journal</h1>
-      <p className="mt-2 text-lg text-gray-400">
+      <p className="mt-2 mb-6 text-lg text-gray-400">
         Learnings and doings. Updated weekly.
       </p>
       <main>
