@@ -64,7 +64,11 @@ function EntryList({ entries, title }: EntryListProps) {
         <div key={entry.id}>
           <ul className="ml-8 list-disc">
             <li>
-              <Link to={entry.id} className={"hover:text-gray-300"}>
+              <Link
+                to={entry.id}
+                prefetch={"intent"}
+                className={"hover:text-gray-300"}
+              >
                 {entry.text}
               </Link>
             </li>
