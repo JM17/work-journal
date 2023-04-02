@@ -1,19 +1,23 @@
-import { PrismaClient } from "@prisma/client";
 import type { LoaderArgs } from "@remix-run/node";
 import { type ActionArgs, json, redirect } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { getUser, requireUserId } from "~/utils/session.server";
 import { format, parseISO, startOfWeek } from "date-fns";
-import { getEntries } from "~/model/entry.server";
+import { createEntry, deleteEntry, getEntries } from "~/model/entry.server";
 import NavButton from "~/components/buttons/nav-button";
+import RemoveButton from "~/components/buttons/remove-button";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
-  let db = new PrismaClient();
 
-  let formData = await request.formData();
-  let { date, type, text } = Object.fromEntries(formData);
+  const formData = await request.formData();
+  const { date, type, text, intent, id } = Object.fromEntries(formData);
+
+  if (intent === "remove") {
+    await deleteEntry(id as string);
+    return redirect("/entries");
+  }
 
   if (
     typeof date !== "string" ||
@@ -23,13 +27,11 @@ export async function action({ request }: ActionArgs) {
     throw new Error("Bad request");
   }
 
-  return db.entry.create({
-    data: {
-      date: new Date(date),
-      type: type,
-      text: text,
-      userId: userId,
-    },
+  return createEntry({
+    date: new Date(date),
+    type: type,
+    text: text,
+    userId: userId,
   });
 }
 
@@ -64,13 +66,16 @@ function EntryList({ entries, title }: EntryListProps) {
         <div key={entry.id}>
           <ul className="ml-8 list-disc">
             <li>
-              <Link
-                to={entry.id}
-                prefetch={"intent"}
-                className={"hover:text-gray-300"}
-              >
-                {entry.text}
-              </Link>
+              <span className={"inline-flex items-baseline"}>
+                <Link
+                  to={entry.id}
+                  prefetch={"intent"}
+                  className={"mr-2 hover:text-gray-300"}
+                >
+                  {entry.text}
+                </Link>
+                <RemoveButton id={entry.id} />
+              </span>
             </li>
           </ul>
         </div>
