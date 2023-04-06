@@ -7,6 +7,7 @@ import { format, parseISO, startOfWeek } from "date-fns";
 import { createEntry, deleteEntry, getEntries } from "~/model/entry.server";
 import NavButton from "~/components/buttons/nav-button";
 import RemoveButton from "~/components/buttons/remove-button";
+import { AnimatePresence, motion } from "framer-motion";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -62,24 +63,31 @@ function EntryList({ entries, title }: EntryListProps) {
   return (
     <div>
       <p>{title}</p>
-      {entries.map((entry) => (
-        <div key={entry.id}>
-          <ul className="ml-8 list-disc">
-            <li>
-              <span className={"inline-flex items-baseline"}>
-                <Link
-                  to={entry.id}
-                  prefetch={"intent"}
-                  className={"mr-2 hover:text-gray-300"}
-                >
-                  {entry.text}
-                </Link>
-                <RemoveButton id={entry.id} />
-              </span>
-            </li>
-          </ul>
-        </div>
-      ))}
+      <div>
+        <ul className="ml-8 list-disc">
+          <AnimatePresence>
+            {entries.map((entry) => (
+              <motion.li
+                key={entry.id}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 24, opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+              >
+                <span className={"inline-flex items-baseline"}>
+                  <Link
+                    to={entry.id}
+                    prefetch={"intent"}
+                    className={"mr-2 hover:text-gray-300"}
+                  >
+                    {entry.text}
+                  </Link>
+                  <RemoveButton id={entry.id} />
+                </span>
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </ul>
+      </div>
     </div>
   );
 }
