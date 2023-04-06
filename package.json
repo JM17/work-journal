@@ -7,6 +7,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
+    "test": "npx playwright test",
     "start": "remix-serve build",
     "typecheck": "tsc"
   },
@@ -18,11 +19,13 @@
     "@remix-run/serve": "^1.14.3",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.29.3",
+    "framer-motion": "^10.10.0",
     "isbot": "^3.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.32.2",
     "@remix-run/dev": "^1.14.3",
     "@remix-run/eslint-config": "^1.14.3",
     "@types/bcryptjs": "^2.4.2",
