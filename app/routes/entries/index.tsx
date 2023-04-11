@@ -15,7 +15,7 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const { date, type, text, intent, id } = Object.fromEntries(formData);
 
-  if (intent === "remove") {
+  if (intent === "delete") {
     await deleteEntry(id as string);
     return redirect("/entries");
   }
