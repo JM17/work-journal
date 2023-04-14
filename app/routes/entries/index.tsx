@@ -142,7 +142,7 @@ export default function EntriesIndexRoute() {
         {weeks.map((week) => (
           <div key={week.startingDate} className={"mt-6"}>
             <p className="font-bold">
-              Week of February {format(parseISO(week.startingDate), "MMMM do")}
+              Week of {format(parseISO(week.startingDate), "MMMM do")}
             </p>
             <div className="mt-3 space-y-4">
               {week.work.length > 0 && (
