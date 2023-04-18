@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { getUser, requireUserId } from "~/utils/session.server";
 import { format, parseISO, startOfWeek } from "date-fns";
 import { createEntry, deleteEntry, getEntries } from "~/model/entry.server";
-import NavButton from "~/components/buttons/nav-button";
+import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 import RemoveButton from "~/components/buttons/remove-button";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -59,6 +59,7 @@ type EntryListProps = {
   entries: { id: string; text: string }[];
   title: string;
 };
+
 function EntryList({ entries, title }: EntryListProps) {
   return (
     <div>
@@ -135,6 +136,7 @@ export default function EntriesIndexRoute() {
 
   return (
     <div>
+      <NavButton to={`/`} label={"Home"} leftIcon={<BackIcon />} />
       <div className="mt-6">
         <NavButton to={"new"} label={"Add new entry"} />
       </div>
