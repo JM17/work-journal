@@ -29,12 +29,13 @@ export default function Index() {
         </div>
       )}
       <h1 className="text-5xl">Work Journal</h1>
-      <p className="mt-2 text-lg text-gray-400">
+      <p className="mt-2 text-lg text-gray-700 dark:text-gray-400">
         Learnings and doings. Updated weekly.
       </p>
       <main>
         <div className="mt-6">
           <NavButton to={"entries"} label={"Journal"} />
+          <NavButton to={"users"} label={"Users"} />
         </div>
       </main>
     </div>
