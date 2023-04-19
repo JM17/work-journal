@@ -32,7 +32,9 @@ export default function NavButton({
     <nav>
       <Link
         to={to}
-        className={"inline-flex items-center text-blue-500 hover:text-blue-400"}
+        className={
+          "inline-flex items-center text-sm text-blue-500 hover:text-blue-400"
+        }
       >
         {leftIcon}
         {label || "Back"}

@@ -36,6 +36,7 @@ export default function Index() {
         <div className="mt-6">
           <NavButton to={"entries"} label={"Journal"} />
           <NavButton to={"users"} label={"Users"} />
+          <NavButton to={"graph"} label={"Graph"} />
         </div>
       </main>
     </div>
