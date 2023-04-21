@@ -10,7 +10,6 @@ import {
   startOfMonth,
 } from "date-fns";
 import { motion } from "framer-motion";
-import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 
 export default function GraphIndexRoute() {
   const entries = [
@@ -23,9 +22,8 @@ export default function GraphIndexRoute() {
   ];
 
   return (
-    <div className={"mx-auto max-w-6xl py-8 lg:py-16"}>
+    <div className={"mx-auto max-w-7xl py-8 lg:py-16"}>
       <div className={"m-10"}>
-        <NavButton to={`/`} label={"Home"} leftIcon={<BackIcon />} />
         <div className="pb-6 sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
             Timeline Graph
@@ -123,7 +121,7 @@ function ChartInner({
       {months.map((month, i) => (
         <g
           key={month.getMonth()}
-          className={"text-gray-400"}
+          className={"text-gray-500 dark:text-gray-400"}
           transform={`translate(${xScale(month)},0)`}
         >
           {i % 2 === 1 && (
@@ -131,7 +129,7 @@ function ChartInner({
               width={xScale(endOfMonth(month)) - xScale(month)}
               height={height - margin.bottom}
               fill={"currentColor"}
-              className={"text-gray-800"}
+              className={"text-gray-200 dark:text-gray-800"}
             />
           )}
           <text
@@ -188,11 +186,10 @@ function ChartInner({
           cy={yScale(d.value)}
           r={5}
           fill={"currentColor"}
-          stroke={
+          className={
             months.findIndex((m) => isSameMonth(m, d.date)) % 2 === 1
-              ? // this could be done with tailwind
-                "#262626"
-              : "#181818"
+              ? "stroke-gray-200 dark:stroke-gray-800"
+              : "stroke-gray-100 dark:stroke-gray-900"
           }
           strokeWidth={2}
           initial={{ opacity: 0 }}
