@@ -1,9 +1,10 @@
 import type {
   LinksFunction,
+  LoaderArgs,
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json, LoaderArgs, redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -16,8 +17,8 @@ import {
 import stylesheet from "~/tailwind.css";
 import { getEnv } from "~/env.server";
 import LogoutButton from "~/components/buttons/logout-button";
-import NavButton from "~/components/buttons/nav-button";
 import { getUser } from "~/utils/session.server";
+import Tabs from "~/components/tabs";
 
 type LoaderData = {
   ENV: ReturnType<typeof getEnv>;
@@ -42,6 +43,13 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+let tabs = [
+  { to: "/", label: "Home" },
+  { to: "entries", label: "Journal" },
+  { to: "customers", label: "Customers" },
+  { to: "graph", label: "Graph" },
+];
+
 export default function App() {
   const data = useLoaderData<typeof loader>();
   return (
@@ -65,11 +73,8 @@ export default function App() {
             Learnings and doings. Updated weekly.
           </p>
           <main>
-            <div className="mt-6 flex gap-3">
-              <NavButton to={"/"} label={"Home"} />
-              <NavButton to={"entries"} label={"Journal"} />
-              <NavButton to={"customers"} label={"Customers"} />
-              <NavButton to={"graph"} label={"Graph"} />
+            <div className="mt-4 mb-4">
+              <Tabs tabs={tabs} />
             </div>
             <Outlet />
           </main>
