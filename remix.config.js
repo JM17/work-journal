@@ -8,5 +8,10 @@ module.exports = {
   future: {
     unstable_tailwind: true,
   },
-  serverDependenciesToBundle: [/^d3.*/, /^internmap.*/, /^delaunator.*/],
+  serverDependenciesToBundle: [
+    /^d3.*/,
+    /^internmap.*/,
+    /^delaunator.*/,
+    /^robust-predicates.*/,
+  ],
 };

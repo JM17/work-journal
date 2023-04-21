@@ -6,7 +6,6 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { format } from "date-fns";
@@ -80,7 +79,6 @@ export default function EntryRoute() {
 
   return (
     <FormContainer>
-      <NavButton to={`/entries`} label={"Journal"} leftIcon={<BackIcon />} />
       <div>
         <FormTitle title={"Edit entry"} />
         <Form method="post">

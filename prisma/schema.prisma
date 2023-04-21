@@ -20,10 +20,26 @@ model User {
 }
 
 model Entry {
-  id        String      @id @default(uuid())
-  userId    String
-  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String   @id @default(uuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   text   String
-  type     String
-  date DateTime @default(now())
+  type   String
+  date   DateTime @default(now())
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String
+  address   String
+  city      String
+  state     String
+  zip       String
+  country   String
+  title     String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

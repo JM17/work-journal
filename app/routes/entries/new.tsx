@@ -5,7 +5,6 @@ import { format } from "date-fns";
 import { useEffect, useRef } from "react";
 import { badRequest } from "~/utils/request.server";
 import { requireUserId } from "~/utils/session.server";
-import NavButton, { BackIcon } from "~/components/buttons/nav-button";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { validateText } from "~/utils/validators";
@@ -72,7 +71,6 @@ export default function NewEntryRoute() {
 
   return (
     <FormContainer>
-      <NavButton to={`/entries`} label={"Journal"} leftIcon={<BackIcon />} />
       <div>
         <FormTitle title={"Create a new entry"} />
         <Form method="post">
