@@ -50,7 +50,7 @@ export default function Index() {
             email and role.
           </Header.Subtitle>
         </Header.TitleSection>
-        <AddButton>Add user</AddButton>
+        <AddButton to="/customers/new">Add user</AddButton>
       </Header>
       <div className="mt-8 flex flex-col">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

@@ -9,7 +9,8 @@ type Tab = {
 
 export default function Tabs({ tabs }: { tabs: Tab[] }) {
   let location = useLocation();
-  let [activeTab, setActiveTab] = useState(location.pathname || "/");
+  let locationParent = "/" + location.pathname.split("/")[1];
+  let [activeTab, setActiveTab] = useState(locationParent || "/");
 
   return (
     <div className="flex space-x-1">
