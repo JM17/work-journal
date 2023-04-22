@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
 import { motion } from "framer-motion";
 
 type Tab = {
@@ -8,7 +8,9 @@ type Tab = {
 };
 
 export default function Tabs({ tabs }: { tabs: Tab[] }) {
-  let [activeTab, setActiveTab] = useState("/");
+  let location = useLocation();
+  let [activeTab, setActiveTab] = useState(location.pathname || "/");
+
   return (
     <div className="flex space-x-1">
       {tabs.map((tab) => (
@@ -21,12 +23,15 @@ export default function Tabs({ tabs }: { tabs: Tab[] }) {
           >
             {activeTab === tab.to && (
               <motion.div
+                /** This is required for framer motion to apply layout animation */
                 layoutId="active-tab"
                 className="absolute inset-0 bg-blue-500"
+                /** This is required for framer motion to know precise rounded value for animation, as it cannot read it directly from Tailwind class  */
                 style={{ borderRadius: 9999 }}
                 transition={{ type: "spring", duration: 0.6 }}
               />
             )}
+            {/** This is required in order for a non black/white background to generate a contrast text color with mix-blend-exclusion */}
             <div className="grayscale">
               <span className={"relative z-10 mix-blend-exclusion"}>
                 {tab.label}

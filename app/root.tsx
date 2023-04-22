@@ -28,7 +28,7 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const user = await getUser(request);
   if (!user?.username || typeof user.id !== "string") {
-    throw redirect(`/login`);
+    redirect(`/login`);
   }
   return json<LoaderData>({ ENV: getEnv(), user });
 };
@@ -39,15 +39,15 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Work journal",
+  title: "Daily notes",
   viewport: "width=device-width,initial-scale=1",
 });
 
 let tabs = [
   { to: "/", label: "Home" },
-  { to: "entries", label: "Journal" },
-  { to: "customers", label: "Customers" },
-  { to: "graph", label: "Graph" },
+  { to: "/entries", label: "Journal" },
+  { to: "/customers", label: "Customers" },
+  { to: "/graph", label: "Graph" },
 ];
 
 export default function App() {
@@ -60,24 +60,29 @@ export default function App() {
       </head>
       <body className="h-full min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
         <div className="mx-auto max-w-7xl p-10">
-          {data?.user?.username && (
-            <div className={"mb-4 flex align-middle"}>
-              <h3 className={"flex-grow"}>
-                Welcome, <b>{data?.user?.username}</b>
-              </h3>
-              <LogoutButton />
-            </div>
-          )}
-          <h1 className="text-5xl">Work Journal</h1>
-          <p className="mt-2 text-lg text-gray-700 dark:text-gray-400">
-            Learnings and doings. Updated weekly.
-          </p>
-          <main>
-            <div className="mt-4 mb-4">
-              <Tabs tabs={tabs} />
-            </div>
+          {data?.user?.username ? (
+            <>
+              <div className={"mb-4 flex align-middle"}>
+                <h3 className={"flex-grow"}>
+                  Welcome, <b>{data?.user?.username}</b>
+                </h3>
+                <LogoutButton />
+              </div>
+              <h1 className="text-5xl">Daily notes</h1>
+              <p className="mt-2 text-lg text-gray-700 dark:text-gray-400">
+                Learnings and doings. Updated weekly.
+              </p>
+              <main>
+                <div className="mt-4 mb-4">
+                  <Tabs tabs={tabs} />
+                </div>
+                <Outlet />
+              </main>
+            </>
+          ) : (
+            /** TODO Is there a better way to separate login page?? */
             <Outlet />
-          </main>
+          )}
         </div>
         <ScrollRestoration />
         <Scripts />
