@@ -32,14 +32,14 @@ model Customer {
   id        String   @id @default(uuid())
   name      String
   email     String
-  phone     String
-  address   String
-  city      String
-  state     String
-  zip       String
-  country   String
-  title     String
-  role      String
+  phone     String?
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  country   String?
+  title     String?
+  role      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

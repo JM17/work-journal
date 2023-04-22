@@ -7,6 +7,10 @@ export async function getCustomers() {
 export async function getCustomer(id: string) {
   return await db.customer.findUnique({ where: { id: id } });
 }
+
+export async function createCustomer(data: any) {
+  return await db.customer.create({ data });
+}
 export async function deleteCustomer(id: string) {
   return await db.customer.delete({ where: { id } });
 }
