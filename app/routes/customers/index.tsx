@@ -1,11 +1,23 @@
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import type { ReactNode } from "react";
-import { json } from "@remix-run/node";
-import { getCustomers } from "~/model/customer.server";
+import type { ActionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { deleteCustomer, getCustomers } from "~/model/customer.server";
 import IndexContainer from "~/components/index-container";
 import Header from "~/components/header";
 import AddButton from "~/components/buttons/add-button";
+import RemoveButton from "~/components/buttons/remove-button";
+
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const { intent, id } = Object.fromEntries(formData);
+
+  if (intent === "delete") {
+    await deleteCustomer(id as string);
+    return redirect("/customers");
+  }
+}
 
 type LoaderData = {
   customers: Awaited<ReturnType<typeof getCustomers>>;
@@ -84,13 +96,7 @@ export default function Index() {
                         </Link>
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
-                        <Link
-                          to={`/customers/${person.id}`}
-                          className="text-red-500 hover:text-red-400"
-                        >
-                          Delete
-                          <span className={"sr-only"}> {person.name}</span>
-                        </Link>
+                        <RemoveButton id={person.id} variant={"full"} />
                       </td>
                     </tr>
                   ))}

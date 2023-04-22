@@ -2,11 +2,23 @@ import { Form } from "@remix-run/react";
 import React, { useRef } from "react";
 import clsx from "clsx";
 
-export default function RemoveButton({ id }: { id: string }) {
+export default function RemoveButton({
+  id,
+  variant,
+}: {
+  id: string;
+  variant?: "icon" | "full";
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   return (
     <div>
-      <button onClick={() => dialogRef.current?.showModal()}>&times;</button>
+      <button onClick={() => dialogRef.current?.showModal()}>
+        {variant === "full" ? (
+          <span className="text-red-500 hover:text-red-400">Delete</span>
+        ) : (
+          <>&times;</>
+        )}
+      </button>
       <dialog id="dialog" ref={dialogRef}>
         <div className="fixed inset-0 z-20 bg-black/50" />
         <div
@@ -14,7 +26,7 @@ export default function RemoveButton({ id }: { id: string }) {
             "fixed z-50",
             "w-[95vw] max-w-md rounded-lg p-4 md:w-full",
             "left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]",
-            "bg-white dark:bg-gray-800"
+            "whitespace-normal bg-white text-left dark:bg-gray-800"
           )}
         >
           <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100">

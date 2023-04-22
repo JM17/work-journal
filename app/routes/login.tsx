@@ -1,5 +1,5 @@
 import { useActionData, useSearchParams } from "@remix-run/react";
-import { ActionArgs } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
 import { PrismaClient } from "@prisma/client";
 import { badRequest } from "~/utils/request.server";
 import { createUserSession, login, register } from "~/utils/session.server";
@@ -105,7 +105,7 @@ export default function Login() {
     <div className="p=6 mx-auto max-w-3xl">
       <div className="my-8 rounded-xl border border-gray-700 p-8 text-center">
         <h1 className="text-5xl">
-          <span className="font-extralight">Welcome to</span> Work Journal
+          <span className="font-extralight">Welcome to</span> Daily notes
         </h1>
         <p className="mt-2 border-b-gray-700 text-lg text-gray-400">
           Learnings and doings. Updated weekly.
