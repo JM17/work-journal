@@ -1,7 +1,7 @@
 import { Form, useNavigation } from "@remix-run/react";
 import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
-import SubmitButton from "~/components/buttons/submit-button";
+import Button from "~/components/buttons/button";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { badRequest } from "~/utils/request.server";
@@ -102,7 +102,9 @@ export default function NewCustomer() {
               />
             </div>
             <div className={"mt-2 text-right"}>
-              <SubmitButton isSubmitting={isSubmitting} />
+              <Button disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save"}
+              </Button>
             </div>
           </fieldset>
         </Form>

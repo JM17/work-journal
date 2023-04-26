@@ -13,7 +13,7 @@ import { badRequest } from "~/utils/request.server";
 import { useEffect, useRef } from "react";
 import { validateText } from "~/utils/validators";
 import { getEntry, updateEntry } from "~/model/entry.server";
-import SubmitButton from "~/components/buttons/submit-button";
+import Button from "~/components/buttons/button";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -151,7 +151,9 @@ export default function EntryRoute() {
               ) : null}
             </div>
             <div className={"mt-2 text-right"}>
-              <SubmitButton isSubmitting={isSubmitting} />
+              <Button disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save"}
+              </Button>
             </div>
           </fieldset>
         </Form>
