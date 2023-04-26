@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 import type { ReactNode } from "react";
+import Button from "~/components/buttons/button";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
 export default function AddButton({
   children,
@@ -10,9 +12,7 @@ export default function AddButton({
 }) {
   return (
     <Link to={to}>
-      <button className="w-24 rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-400">
-        {children}
-      </button>
+      <Button leading={<PlusIcon />}>{children}</Button>
     </Link>
   );
 }
