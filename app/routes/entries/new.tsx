@@ -9,7 +9,7 @@ import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { validateText } from "~/utils/validators";
 import { createEntry } from "~/model/entry.server";
-import SubmitButton from "~/components/buttons/submit-button";
+import Button from "~/components/buttons/button";
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -140,7 +140,9 @@ export default function NewEntryRoute() {
               ) : null}
             </div>
             <div className={"mt-2 text-right"}>
-              <SubmitButton isSubmitting={isSubmitting} />
+              <Button disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save"}
+              </Button>
             </div>
           </fieldset>
         </Form>

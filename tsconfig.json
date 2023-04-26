@@ -8,6 +8,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "ES2019",
+    // makes imports only type an automatic action
+    "preserveValueImports": true,
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
