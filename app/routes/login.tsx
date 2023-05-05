@@ -110,7 +110,7 @@ export default function Login() {
       style={
         {
           "--light-gray": "240 240 240",
-          "--dark-gray": "15 15 17",
+          "--dark-gray": "25 25 25",
           "--light-purple": "120 119 198", // from the example
           "--light-blue": "59 130 246",
 

@@ -58,7 +58,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-200">
+      <body className="h-full min-h-screen bg-gray-100 bg-hero-pattern text-gray-900 dark:bg-gray-900 dark:bg-hero-pattern-dark dark:text-gray-200">
         <div className="mx-auto max-w-7xl p-10">
           {data?.user?.username ? (
             <>
