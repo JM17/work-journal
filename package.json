@@ -22,11 +22,15 @@
     "clsx": "^1.2.1",
     "d3": "^7.8.4",
     "date-fns": "^2.29.3",
+    "domain-functions": "^1.7.0",
     "framer-motion": "^10.11.2",
     "isbot": "^3.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-use-measure": "^2.1.1"
+    "react-hook-form": "^7.43.9",
+    "react-use-measure": "^2.1.1",
+    "remix-forms": "^1.6.3",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.15.0",
