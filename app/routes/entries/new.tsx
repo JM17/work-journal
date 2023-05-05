@@ -10,13 +10,16 @@ import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
 import { formAction } from "~/form-action.server";
 
-const schema = z.object({
+export const schema = z.object({
   date: z.date().default(new Date()),
   type: z.enum(["work", "learning", "interesting-thing"]).default("work"),
   text: z.string().min(3),
 });
+const hasId = z.object({ id: z.string() });
 
-const envSchema = z.object({
+export const withId = schema.merge(hasId);
+
+export const envSchema = z.object({
   userId: z.string(),
 });
 
@@ -52,7 +55,6 @@ export default function NewEntry() {
 
   useEffect(() => {
     if (isSubmitting && textareaRef.current) {
-      textareaRef.current.value = "";
       textareaRef.current.focus();
     }
   }, [isSubmitting]);
@@ -60,7 +62,7 @@ export default function NewEntry() {
   return (
     <FormContainer>
       <FormTitle title={"Create a new entry"} />
-      <Form method="post" schema={schema}>
+      <Form schema={schema}>
         {({ Field, Errors, Button }) => (
           <>
             <Field name="date" />
@@ -69,6 +71,7 @@ export default function NewEntry() {
             <Button disabled={isSubmitting}>
               {isSubmitting ? "Saving..." : "Save"}
             </Button>
+            <Errors />
           </>
         )}
       </Form>

@@ -7,9 +7,9 @@ export default function Label({
   return (
     <label
       className={clsx(
-        "block font-medium",
+        "block text-sm font-medium",
         className,
-        !className && "text-gray-400"
+        !className && "text-gray-600 dark:text-gray-400"
       )}
       {...props}
     />
