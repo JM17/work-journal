@@ -8,6 +8,8 @@ import IndexContainer from "~/components/index-container";
 import Header from "~/components/header";
 import AddButton from "~/components/buttons/add-button";
 import RemoveButton from "~/components/buttons/remove-button";
+import { CustomerModel } from "~/routes/customers.new";
+import { objectFromSchema } from "~/utils/prelude";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -40,6 +42,8 @@ export default function customers_index() {
       : a[sortProp]?.localeCompare(b[sortProp]);
   });
 
+  const schemaShape = objectFromSchema(CustomerModel).shape;
+
   return (
     <IndexContainer>
       <Header>
@@ -50,7 +54,7 @@ export default function customers_index() {
             email and role.
           </Header.Subtitle>
         </Header.TitleSection>
-        <AddButton to="/customers/new">Add user</AddButton>
+        <AddButton to="./new">Add user</AddButton>
       </Header>
       <div className="mt-8 flex flex-col">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -59,10 +63,11 @@ export default function customers_index() {
               <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-500">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
-                    <SortableColumn prop="name">Name</SortableColumn>
-                    <SortableColumn prop="title">Title</SortableColumn>
-                    <SortableColumn prop="email">Email</SortableColumn>
-                    <SortableColumn prop="role">Role</SortableColumn>
+                    {Object.keys(schemaShape).map((key, value) => (
+                      <SortableColumn key={key} prop={key}>
+                        <p className={"capitalize"}>{key}</p>
+                      </SortableColumn>
+                    ))}
                     <th className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                       <span className="sr-only">Edit</span>
                     </th>
@@ -74,21 +79,17 @@ export default function customers_index() {
                 <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-500 dark:bg-gray-800">
                   {sortedPeople.map((person) => (
                     <tr key={person.email}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
-                        {person.name}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200">
-                        {person.title}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200">
-                        {person.email}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200">
-                        {person.role}
-                      </td>
+                      {Object.keys(schemaShape).map((key, value) => (
+                        <td
+                          key={key}
+                          className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 first:pl-4 first:pr-3 first:font-medium dark:text-gray-200 first:sm:pl-6"
+                        >
+                          {person[key]}
+                        </td>
+                      ))}
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
                         <Link
-                          to={`/customers/${person.id}`}
+                          to={`./${person.id}`}
                           className="text-blue-500 hover:text-blue-400"
                         >
                           Edit
