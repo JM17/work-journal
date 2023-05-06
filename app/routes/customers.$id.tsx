@@ -1,7 +1,25 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getCustomer } from "~/model/customer.server";
+import { getCustomer, updateCustomer } from "~/model/customer.server";
 import { useLoaderData } from "@remix-run/react";
+import FormContainer from "~/components/form-container";
+import FormTitle from "~/components/form-title";
+import Form from "~/components/form/form";
+import { withId } from "~/routes/customers.new";
+import { makeDomainFunction } from "domain-functions";
+import { formAction } from "~/form-action.server";
+
+const mutation = makeDomainFunction(withId)(
+  async (values) => await updateCustomer(values.id, values)
+);
+
+export async function action({ request }: ActionArgs) {
+  return formAction({
+    request,
+    schema: withId,
+    mutation,
+  });
+}
 
 type LoaderData = {
   customer: Awaited<ReturnType<typeof getCustomer>>;
@@ -22,8 +40,9 @@ export default function User() {
   }
 
   return (
-    <div>
-      <h1>{customer?.name}</h1>
-    </div>
+    <FormContainer>
+      <FormTitle title={"Edit customer"} />
+      <Form schema={withId} values={customer} hiddenFields={["id"]} />
+    </FormContainer>
   );
 }
