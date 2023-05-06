@@ -20,7 +20,6 @@ export async function action({ request }: ActionArgs) {
     request,
     schema: withId,
     mutation,
-    successPath: "/entries",
   });
 }
 
