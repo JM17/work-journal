@@ -30,7 +30,7 @@ export const loader = async () => {
   });
 };
 
-export default function Index() {
+export default function customers_index() {
   const { customers } = useLoaderData<typeof loader>();
   let [searchParams] = useSearchParams();
   let [sortProp, desc] = searchParams.get("sort")?.split(":") ?? [];

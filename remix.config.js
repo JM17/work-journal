@@ -7,6 +7,8 @@ module.exports = {
   // publicPath: "/build/",
   future: {
     unstable_tailwind: true,
+    // makes the warning go away in v1.15
+    v2_routeConvention: true,
   },
   serverDependenciesToBundle: [
     /^d3.*/,
