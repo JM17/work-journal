@@ -5,7 +5,7 @@ import FormContainer from "~/components/form-container";
 import FormTitle from "~/components/form-title";
 import { getEntry, updateEntry } from "~/model/entry.server";
 import { makeDomainFunction } from "domain-functions";
-import { withId } from "~/routes/entries/new";
+import { withId } from "~/routes/entries.new";
 import { formAction } from "~/form-action.server";
 import Form from "~/components/form/form";
 
