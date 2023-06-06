@@ -1,6 +1,4 @@
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import type { ReactNode } from "react";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { deleteCustomer, getCustomers } from "~/model/customer.server";
@@ -10,6 +8,7 @@ import AddButton from "~/components/buttons/add-button";
 import RemoveButton from "~/components/buttons/remove-button";
 import { CustomerModel } from "~/routes/customers.new";
 import { objectFromSchema } from "~/utils/prelude";
+import { SortableColumn } from "~/components/table/sortable-column";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -32,11 +31,11 @@ export const loader = async () => {
   });
 };
 
-export default function customers_index() {
+export default function CustomersIndex() {
   const { customers } = useLoaderData<typeof loader>();
   let [searchParams] = useSearchParams();
   let [sortProp, desc] = searchParams.get("sort")?.split(":") ?? [];
-  let sortedPeople = [...customers].sort((a, b) => {
+  let sortedData = [...customers].sort((a, b) => {
     return desc
       ? b[sortProp]?.localeCompare(a[sortProp])
       : a[sortProp]?.localeCompare(b[sortProp]);
@@ -77,27 +76,27 @@ export default function customers_index() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-500 dark:bg-gray-800">
-                  {sortedPeople.map((person) => (
-                    <tr key={person.email}>
+                  {sortedData.map((item) => (
+                    <tr key={item.email}>
                       {Object.keys(schemaShape).map((key, value) => (
                         <td
                           key={key}
                           className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 first:pl-4 first:pr-3 first:font-medium dark:text-gray-200 first:sm:pl-6"
                         >
-                          {person[key]}
+                          {item[key]}
                         </td>
                       ))}
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
                         <Link
-                          to={`./${person.id}`}
+                          to={`./${item.id}`}
                           className="text-blue-500 hover:text-blue-400"
                         >
                           Edit
-                          <span className={"sr-only"}> {person.name}</span>
+                          <span className={"sr-only"}> {item.name}</span>
                         </Link>
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
-                        <RemoveButton id={person.id} variant={"full"} />
+                        <RemoveButton id={item.id} variant={"full"} />
                       </td>
                     </tr>
                   ))}
@@ -108,51 +107,5 @@ export default function customers_index() {
         </div>
       </div>
     </IndexContainer>
-  );
-}
-
-function SortableColumn({
-  prop,
-  children,
-}: {
-  prop: string;
-  children: ReactNode;
-}) {
-  let [searchParams] = useSearchParams();
-  let [sortProp, desc] = searchParams.get("sort")?.split(":") ?? [];
-  let newSort = null;
-
-  if (sortProp !== prop) {
-    newSort = prop;
-  } else if (sortProp === prop && !desc) {
-    newSort = `${prop}:desc`;
-  }
-
-  let newSearchParams = new URLSearchParams({ sort: newSort as string });
-
-  return (
-    <th
-      scope="col"
-      className="py-3.5 px-3 text-left text-sm text-gray-900 first:pl-4 dark:text-white first:sm:pl-6"
-    >
-      <Link
-        to={newSort ? `/users/?${newSearchParams}` : "/users"}
-        className="group inline-flex font-semibold"
-      >
-        {children}
-        <span
-          className={`${
-            sortProp === prop
-              ? "bg-gray-200 text-gray-900 group-hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:group-hover:bg-gray-600"
-              : "invisible text-gray-400 group-hover:visible dark:text-gray-200"
-          } ml-2 flex-none rounded`}
-        >
-          <ChevronDownIcon
-            className={`${desc ? "rotate-180" : ""} h-5 w-5`}
-            aria-hidden="true"
-          />
-        </span>
-      </Link>
-    </th>
   );
 }
